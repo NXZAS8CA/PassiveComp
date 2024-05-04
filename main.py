@@ -72,6 +72,7 @@ def seriesResistance(list, value):
 
     #out = [list(x) for x in itertools.combinations(list, 2)]
     #return out, buff
+
 def parallelResistance(list, value):
     buff = []
     for i in range(0, len(list)):
@@ -83,14 +84,21 @@ def parallelResistance(list, value):
     out = getNextClosestValue([x[2] for x in buff], value)
     return buff[out]
 
-
+def checkArgs(args):
+    if args.eseries not in [3, 6, 12, 24, 48, 96, 192]:
+        print("test")
+        raise ValueError("Invalid E-Series specified! Use one of these instead: 3, 6, 12, 24, 48, 96, 192")
+    
 def main():
     parser = argparse.ArgumentParser()
     #parser.add_argument("-t", "--type", help="specify component type") #TODO: needs work
     parser.add_argument("-v", "--value", help="specify the target value", type=float)
+    parser.add_argument("-e", "--eseries", help="specify the e-series. Possible values are: 3, 6, 12, 24, 48, 96, 192", type=int)
     args = parser.parse_args()
 
-    values = createSeries(12)
+    checkArgs(args)
+
+    values = createSeries(args.eseries)
     target = args.value
     target, factor = norminalizeValue(target)
 
