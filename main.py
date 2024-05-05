@@ -86,14 +86,16 @@ def parallelResistance(list, value):
 
 def checkArgs(args):
     if args.eseries not in [3, 6, 12, 24, 48, 96, 192]:
-        print("test")
         raise ValueError("Invalid E-Series specified! Use one of these instead: 3, 6, 12, 24, 48, 96, 192")
     
+    if args.value >= 1000:
+        raise ValueError("Please use a value smaller than 1000. If possible convert the value to the next SI Prefix.")
+
 def main():
     parser = argparse.ArgumentParser()
     #parser.add_argument("-t", "--type", help="specify component type") #TODO: needs work
-    parser.add_argument("-v", "--value", help="specify the target value", type=float)
-    parser.add_argument("-e", "--eseries", help="specify the e-series. Possible values are: 3, 6, 12, 24, 48, 96, 192", type=int)
+    parser.add_argument("-v", "--value", help="Specify the target value. Values smaller than 1000 are allowed", type=float)
+    parser.add_argument("-e", "--eseries", help="Specify the e-series. Possible values are: 3, 6, 12, 24, 48, 96, 192", type=int)
     args = parser.parse_args()
 
     checkArgs(args)
@@ -129,4 +131,3 @@ if __name__ == '__main__':
     main()
 
     
-#FEATURES: Series and Parallel, best match, what Eseries is needed
