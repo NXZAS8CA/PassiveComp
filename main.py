@@ -1,6 +1,5 @@
 import math
 import argparse
-import itertools
 
 
 def createSeries(n):
@@ -57,7 +56,7 @@ def denorminalizeValue(value, factor):
 def calculateError(target, value):
     return (((value - target) / target) * 100)
 
-def seriesResistance(list, value):
+def calculateSeries(list, value):
     buff = []
     for i in range(0, len(list)):
         for j in range(i, len(list)):
@@ -68,12 +67,7 @@ def seriesResistance(list, value):
     out = getNextClosestValue([x[2] for x in buff], value)
     return buff[out]
 
-
-
-    #out = [list(x) for x in itertools.combinations(list, 2)]
-    #return out, buff
-
-def parallelResistance(list, value):
+def calculateParallel(list, value):
     buff = []
     for i in range(0, len(list)):
         for j in range(i, len(list)):
@@ -95,18 +89,19 @@ def main():
     parser = argparse.ArgumentParser()
     #parser.add_argument("-t", "--type", help="specify component type") #TODO: needs work
     parser.add_argument("-v", "--value", help="Specify the target value. Values smaller than 1000 are allowed", type=float)
-    parser.add_argument("-e", "--eseries", help="Specify the e-series. Possible values are: 3, 6, 12, 24, 48, 96, 192", type=int)
+    parser.add_argument("-e", "--eseries", help="Specify the e-series. Possible values are: 3, 6, 12, 24, 48, 96, 192", type=int, choices=[3, 6, 12, 24, 48, 96, 192])
+    parser.add_argument("-c", "--config", help="Configure which combination mode is used.", choices=['S','P','SP','PS'])
     args = parser.parse_args()
 
-    checkArgs(args)
+    #checkArgs(args)
 
     values = createSeries(args.eseries)
     target = args.value
     target, factor = norminalizeValue(target)
 
     buff = getNextClosestValue(values, target)
-    series = seriesResistance(values, target)
-    parallel = parallelResistance(values, target)
+    series = calculateSeries(values, target)
+    parallel = calculateParallel(values, target)
 
     target = denorminalizeValue(target, factor)
     value = denorminalizeValue(values[buff], factor)
